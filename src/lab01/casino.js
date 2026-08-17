@@ -1,14 +1,15 @@
 // @ts-check
 // ^^^^^^^^^ informs VSC to help check this JS code.
+//           IDEA sees JS file as TS by default.
 class Person {
-    
-    _name;
+
+    _name; // Manier in JS om een property te declareren, maar niet verplicht. Kan ook in de constructor.
 
     /**
      * @param {string} name
      */
     constructor(name) {
-        this._name = name; // bug? no, allowed in JS..!
+        this._name = name; // bug? no, allowed in JS!
     }
 }
 
@@ -28,8 +29,8 @@ class Player extends Person {
     }
 }
 
-var playerOne = new Player('Han', 46); 
-var playerTwo = new Player('Leia', 68); 
+var playerOne = new Player('Han', 46);
+var playerTwo = new Player('Leia', 68);
 
 var highestNumberOfChips = Math.max(playerOne.chips, playerTwo.chips);
 console.log(highestNumberOfChips + ' is the highest number of chips');
