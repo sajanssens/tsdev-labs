@@ -37,6 +37,14 @@ class Customer {
             this.insertion = insertion;
         }
     }
+
+    format() {
+        if (this.insertion) {
+            return `${this.firstName} ${this.insertion} ${this.lastName}`;
+        } else {
+            return `${this.firstName} ${this.lastName}`;
+        }
+    }
 }
 
 class BankAccount {
@@ -49,7 +57,7 @@ class BankAccount {
     }
 
     toString() {
-        return `Customer: ${formatName(this.customer)}, IBAN: ${formatIban(this.iban)}`;
+        return `Customer: ${this.customer.toString()}, IBAN: ${this.iban.toString()}`;
     }
 }
 
@@ -86,15 +94,6 @@ class Bank {
         return this.#accounts;
     }
 
-}
-
-function formatName(c: Customer): string {
-    const {firstName, lastName, insertion} = c;
-    if (insertion) {
-        return `${firstName} ${insertion} ${lastName}`;
-    } else {
-        return `${firstName} ${lastName}`;
-    }
 }
 
 function formatIban(iban: Iban) {

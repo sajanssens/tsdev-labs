@@ -40,5 +40,10 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
+
+    // lab 09
+    "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true,
+    "erasableSyntaxOnly": true,
   }
 }
