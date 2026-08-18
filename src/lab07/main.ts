@@ -1,3 +1,11 @@
+function toAlphabetNumbers(word: string) {
+    let result = '';
+    word.split('').forEach(char => {
+        result += (char.charCodeAt(0) - 64).toString();
+    });
+    return result;
+}
+
 class Iban {
     countryCode: string;
     bankCode: string;
@@ -12,7 +20,8 @@ class Iban {
     }
 
     generateControlNumber() {
-        return '00';
+        let mod97 = BigInt(toAlphabetNumbers(this.bankCode) + this.accountNumber + toAlphabetNumbers(this.countryCode) + '00') % 97n;
+        return (98n - mod97).toString().padStart(2, '0');
     }
 }
 
