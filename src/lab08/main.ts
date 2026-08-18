@@ -23,10 +23,6 @@ class Iban {
         let mod97 = BigInt(toAlphabetNumbers(this.bankCode) + this.accountNumber + toAlphabetNumbers(this.countryCode) + '00') % 97n;
         return (98n - mod97).toString().padStart(2, '0');
     }
-
-    format() {
-        return `${this.countryCode}${this.controlNumber} ${this.bankCode} ${this.accountNumber.substring(0, 4)} ${this.accountNumber.substring(4, 8)} ${this.accountNumber.substring(8, 12)}`;
-    }
 }
 
 class Customer {
@@ -41,14 +37,6 @@ class Customer {
             this.insertion = insertion;
         }
     }
-
-    format() {
-        if (this.insertion) {
-            return `${this.firstName} ${this.insertion} ${this.lastName}`;
-        } else {
-            return `${this.firstName} ${this.lastName}`;
-        }
-    }
 }
 
 class BankAccount {
@@ -61,7 +49,7 @@ class BankAccount {
     }
 
     toString() {
-        return `Customer: ${this.customer.format()}, IBAN: ${this.iban.format()}`;
+        return `Customer: ${formatName(this.customer)}, IBAN: ${formatIban(this.iban)}`;
     }
 }
 
@@ -81,9 +69,7 @@ class Bank {
 
     createAccount(customer: Customer): BankAccount {
         const iban = new Iban(this.config.countryCode, this.config.bankCode);
-        auditLog(iban, 'created');
         const account = new BankAccount(customer, iban);
-        auditLog(customer, 'assigned to account');
         this.#accounts.push(account);
         console.log(`[${this.config.bankName}] welcomes ${account}`);
         return account;
@@ -102,6 +88,20 @@ class Bank {
 
 }
 
+function formatName(c: Customer): string {
+    const {firstName, lastName, insertion} = c;
+    if (insertion) {
+        return `${firstName} ${insertion} ${lastName}`;
+    } else {
+        return `${firstName} ${lastName}`;
+    }
+}
+
+function formatIban(iban: Iban) {
+    let a = iban.accountNumber;
+    return `${iban.countryCode}${iban.controlNumber} ${iban.bankCode} ${a.substring(0, 4)} ${a.substring(4, 8)} ${a.substring(8, 12)}`;
+}
+
 const bank = new Bank({bankCode: 'RABO', countryCode: 'NL', bankName: 'Rabobank Leusden'});
 
 bank.createAccount(new Customer('Alfred', 'Kwak', 'Jodocus'));
@@ -109,11 +109,3 @@ bank.createAccount(new Customer('Donald', 'Duck'));
 bank.createAccount(new Customer('Mickey', 'Mouse'));
 
 bank.printAccounts();
-
-interface Formidable { // ;-)
-    format(): string;
-}
-
-function auditLog<T extends Formidable>(subject: T, action: string) {
-    console.log(`[AUDIT] <${action}> performed on ${subject.format()}`);
-}
