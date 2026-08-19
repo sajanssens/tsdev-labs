@@ -45,5 +45,9 @@
     "allowImportingTsExtensions": true,
     "rewriteRelativeImportExtensions": true,
     "erasableSyntaxOnly": true,
+
+    "module": "NodeNext",
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true
   }
 }
