@@ -15,5 +15,6 @@ const hello = new HelloWorld("World");
 hello.greet();
 
 const zero: 0 = 0
+console.log(zero)
 const pair: [string, number] = ['Bram', 46]
 const name = pair[zero]

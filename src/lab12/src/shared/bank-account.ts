@@ -1,5 +1,5 @@
-import type { Customer } from "./customer.ts";
-import type { Iban } from "./iban.ts";
+import {Customer} from "./customer.ts";
+import {Iban} from "./iban.ts";
 
 export class BankAccount {
     iban: Iban;
@@ -16,5 +16,12 @@ export class BankAccount {
 
     toString() {
         return this.format();
+    }
+
+    static fromJson(bankAccount: BankAccount): BankAccount {
+        return new BankAccount(
+            Customer.fromJson(bankAccount.customer),
+            Iban.fromJson(bankAccount.iban),
+        );
     }
 }

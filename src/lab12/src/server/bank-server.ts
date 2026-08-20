@@ -31,7 +31,7 @@ export class BankServer {
 
         this.app.post(`/api/bank/customers`, (rq, resp) => {
             console.log(`get /api/bank/account`);
-            const maybeCustomer = rq.body;
+            const maybeCustomer: unknown = rq.body;
             if (this.isValid(maybeCustomer)) {
                 this.bank.createAccount(
                     new Customer(
@@ -54,11 +54,16 @@ export class BankServer {
         console.log(`Bank ${this.bank.config.bankName} listening on port ${this.bank.config.port}`,);
     }
 
-    private isValid(customer: Customer): boolean {
-        return !!(customer && customer.firstName && typeof customer.firstName === 'string' &&
-            customer.lastName && typeof customer.lastName === 'string' &&
-            (!customer.insertion || typeof customer.insertion === 'string'));
+    private isValid(c: unknown): c is Customer {
+        return Boolean(c &&
+            typeof c === 'object' &&
+            'firstName' in c && typeof c.firstName === 'string' &&
+            'lastName' in c && typeof c.lastName === 'string' &&
+            (!('insertion' in c) || typeof c.insertion === 'string')
+        );
     }
 }
+
+let x = 4
 
 const resolve = (relativePath: string) => fileURLToPath(new URL(`../../${relativePath}`, import.meta.url));

@@ -1,25 +1,13 @@
 import {BankAccount, type BankConfig, Customer, Iban} from '../shared/index.ts';
 import {auditLog} from './audit-log.ts';
-
-function translate(config: BankConfig) {
-    switch (config.lang) {
-        case 'en':
-            return 'welcomes';
-        case 'fr':
-            return 'accueille';
-        case 'nl':
-            return 'verwelkomt';
-        default:
-            return 'welcomes';
-    }
-}
+import {DEFAULT_BANK_CONFIG} from "../shared/bank-config.ts";
 
 export class Bank {
     readonly config: BankConfig;
     readonly #accounts: BankAccount[] = [];
 
-    constructor(config: BankConfig) {
-        this.config = config;
+    constructor(config: Partial<BankConfig>) {
+        this.config = Object.freeze({ ...DEFAULT_BANK_CONFIG, ...config });
     }
 
     createAccount(customer: Customer): BankAccount {
@@ -44,5 +32,24 @@ export class Bank {
 
     get accounts(): BankAccount[] {
         return this.#accounts;
+    }
+}
+
+function handleUnknownLanguage(lang: string): never {
+    throw new Error(`${lang} is not a valid language`);
+}
+
+function translate(config: BankConfig): string {
+    switch (config.lang) {
+        case 'en':
+            return 'welcomes';
+        case 'fr':
+            return 'accueille';
+        case 'nl':
+            return 'verwelkomt';
+        case 'de':
+            return 'begrüßt';
+        default:
+            handleUnknownLanguage(config.lang satisfies never);
     }
 }

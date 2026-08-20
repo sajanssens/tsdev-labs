@@ -22,4 +22,12 @@ export class Customer {
     toString() {
         return this.format();
     }
+
+    static fromJson(customerJson: Customer) {
+        return new Customer(
+            customerJson.firstName,
+            customerJson.lastName,
+            customerJson.insertion,
+        );
+    }
 }
