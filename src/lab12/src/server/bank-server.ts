@@ -18,6 +18,7 @@ export class BankServer {
         this.app.use(express.static(resolve('static')));
         this.app.use(express.static(resolve('dist')));
         this.app.use('/src', express.static(resolve('src')));
+        this.app.use('/node_modules', express.static(resolve('node_modules')));
 
         this.app.get(`/api/bank/`, (_, res) => {
             console.log(`get /api/bank/`);
